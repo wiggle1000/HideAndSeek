@@ -1,0 +1,24 @@
+name: HideAndSeek
+version: '${version}'
+author: wiggle1000
+description: Hide and seek
+main: com.wiggle1000.hideandseek.HideAndSeek
+api-version: '1.20'
+permissions:
+  hideandseek:
+    description: "Show HideAndSeek help"
+    default: true
+    children:
+      hideandseek.join:
+        description: "Join the game of hide and seek"
+        default: true
+      hideandseek.create:
+        description: "Manage hide and seek"
+        default: op
+commands:
+  hideandseek:
+    description: "Show hide and seek help. Try /hideandseek CREATE or JOIN"
+    usage: "/hideandseek"
+    aliases: [has, hideandseek]
+    permission: hideandseek
+    permission-message: "You do not have permission to use this command"
