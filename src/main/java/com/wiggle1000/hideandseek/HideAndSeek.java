@@ -4,15 +4,13 @@ import com.wiggle1000.hideandseek.cmds.cmdHideAndSeek;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +26,9 @@ public final class HideAndSeek extends JavaPlugin {
     public static Team hiders;
     public static Team seekers;
     public static Objective timeRemainingObjective;
+    public static String ResourcepackURL = "https://github.com/wiggle1000/HideAndSeek/raw/master/hideandseek_resources.zip";
+
+    public static UUID ResourcePackUUID = UUID.fromString("dd3386b0-ea59-48a4-9c56-cdf448246b67");
 
 
     @Override
@@ -39,7 +40,7 @@ public final class HideAndSeek extends JavaPlugin {
         //getServer().getCommandMap().register("aa",)
         this.getCommand("hideandseek").setExecutor(new cmdHideAndSeek());
         hideAndSeekInstance = new HideAndSeekInstance();
-        loadMaps();
+        loadConf();
         SetupTeams();
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
@@ -73,20 +74,22 @@ public final class HideAndSeek extends JavaPlugin {
         seekers.suffix(Component.text(" [Seeking]"));
     }
 
-    public void loadMaps()
+    public void loadConf()
     {
         maps = (List<HideAndSeekMap>) getConfig().get("maps", new ArrayList<HideAndSeekMap>());
+        ResourcepackURL = getConfig().getString("datapack-url");
     }
 
-    public void saveMaps()
+    public void saveConf()
     {
         getConfig().set("maps", maps);
+        getConfig().set("datapack-url", ResourcepackURL);
         saveConfig();
     }
 
     @Override
     public void onDisable() {
-        saveMaps();
+        saveConf();
         hiders.unregister();
         seekers.unregister();
         saveConfig();
